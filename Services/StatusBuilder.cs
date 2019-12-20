@@ -4,14 +4,14 @@ using System.Linq;
 
 namespace Formula.Core
 {
-    public class ActionStatusService
+    public class StatusBuilder
     {
-        public ActionStatusService()
+        public StatusBuilder()
         {
             this.Reset();
         }
 
-        public ActionStatusService Reset()
+        public StatusBuilder Reset()
         {
             return this.Succeed()
                        .SetMessage(null)
@@ -22,13 +22,13 @@ namespace Formula.Core
 
         public Boolean IsSuccessful { get; set; }
 
-        public ActionStatusService Succeed()
+        public StatusBuilder Succeed()
         {
             this.IsSuccessful = true;
             return this;
         }
 
-        public ActionStatusService Fail()
+        public StatusBuilder Fail()
         {
             this.IsSuccessful = false;
             return this;
@@ -38,7 +38,7 @@ namespace Formula.Core
 
         public String Message { get; set; }
 
-        public ActionStatusService SetMessage(String message)
+        public StatusBuilder SetMessage(String message)
         {
             this.Message = message;
             return this;
@@ -47,21 +47,25 @@ namespace Formula.Core
 
 
         public Object Data { get; set; }
-        public ActionStatusService SetData(Object data)
+        public StatusBuilder SetData(Object data)
         {
             this.Data = data;
             return this;
         }
+        public TData GetDataAs<TData>()
+        {
+            return (TData)this.Data;
+        }
 
 
         public Dictionary<String, String> Details { get; set; }
-        public ActionStatusService SetDetails(Dictionary<String, String> details)
+        public StatusBuilder SetDetails(Dictionary<String, String> details)
         {
             this.Details = details;
             return this;
         }
 
-        public ActionStatusService RecordFailure(String message, String subject = null)
+        public StatusBuilder RecordFailure(String message, String subject = null)
         {
             this.Fail().SetMessage(message);
 
